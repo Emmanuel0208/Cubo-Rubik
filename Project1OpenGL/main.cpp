@@ -1,21 +1,73 @@
 /*
- *OGL01Shape3D.cpp: 3D Shapes
+ * OGL01Shape3D.cpp: 3D Shapes
  */
- //#include <glfw3.h>
 #include <windows.h>  // for MS Windows
 #include <GL/glut.h>  // GLUT, include glu.h and gl.h
 
  /* Global variables */
 char title[] = "3D Shapes";
+
 /* Initialize OpenGL Graphics */
 void initGL() {
-
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
     glClearDepth(1.0f);                   // Set background depth to farthest
     glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
     glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
     glShadeModel(GL_SMOOTH);   // Enable smooth shading
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
+}
+
+void drawCube(float x, float y, float z, float tamaño)
+{
+    glPushMatrix();
+    glTranslatef(x, y, z);
+
+    glBegin(GL_QUADS);
+
+    // Top face 
+    glColor3f(0.0f, 1.0f, 0.0f);     // Green
+    glVertex3f(tamaño, tamaño, -tamaño);
+    glVertex3f(-tamaño, tamaño, -tamaño);
+    glVertex3f(-tamaño, tamaño, tamaño);
+    glVertex3f(tamaño, tamaño, tamaño);
+
+    // Bottom face
+    glColor3f(1.0f, 0.5f, 0.0f);     // Orange
+    glVertex3f(tamaño, -tamaño, tamaño);
+    glVertex3f(-tamaño, -tamaño, tamaño);
+    glVertex3f(-tamaño, -tamaño, -tamaño);
+    glVertex3f(tamaño, -tamaño, -tamaño);
+
+    // Front face 
+    glColor3f(1.0f, 0.0f, 0.0f);     // Red
+    glVertex3f(tamaño, tamaño, tamaño);
+    glVertex3f(-tamaño, tamaño, tamaño);
+    glVertex3f(-tamaño, -tamaño, tamaño);
+    glVertex3f(tamaño, -tamaño, tamaño);
+
+    // Back face 
+    glColor3f(1.0f, 1.0f, 0.0f);     // Yellow
+    glVertex3f(tamaño, -tamaño, -tamaño);
+    glVertex3f(-tamaño, -tamaño, -tamaño);
+    glVertex3f(-tamaño, tamaño, -tamaño);
+    glVertex3f(tamaño, tamaño, -tamaño);
+
+    // Left face 
+    glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+    glVertex3f(-tamaño, tamaño, tamaño);
+    glVertex3f(-tamaño, tamaño, -tamaño);
+    glVertex3f(-tamaño, -tamaño, -tamaño);
+    glVertex3f(-tamaño, -tamaño, tamaño);
+
+    // Right face 
+    glColor3f(1.0f, 0.0f, 1.0f);     // Magenta
+    glVertex3f(tamaño, tamaño, -tamaño);
+    glVertex3f(tamaño, tamaño, tamaño);
+    glVertex3f(tamaño, -tamaño, tamaño);
+    glVertex3f(tamaño, -tamaño, -tamaño);
+    glEnd();  // End of drawing color-cube
+
+    glPopMatrix();
 }
 
 /* Handler for window-repaint event. Called back when the window first appears and
@@ -26,54 +78,21 @@ void display() {
 
     // Render a color-cube consisting of 6 quads with different colors
     glLoadIdentity();                 // Reset the model-view matrix
-    glTranslatef(1.5f, 0.0f, -9.0f);  // Move right and into the screen
+    glTranslatef(5.0f, 0.0f, -25.0f);  // Move right and into the screen
 
-    glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
-    // Top face (y = 1.0f)
-    // Define vertices in counter-clockwise (CCW) order with normal pointing out
-    glColor3f(0.0f, 1.0f, 0.0f);     // Green
-    glVertex3f(0.5f, 0.5f, -0.5f);
-    glVertex3f(-0.5f, 0.5f, 0.5f);
-    glVertex3f(-0.5f, 0.5f, 0.5f);
-    glVertex3f(0.5f, 0.5f, 0.5f);
+    float separation = 2.2f;
 
-    // Bottom face (y = -1.0f)
-    glColor3f(1.0f, 0.5f, 0.0f);     // Orange
-    glVertex3f(0.5f, 0.5, 0.5f);
-    glVertex3f(-0.5f, -0.5f, 0.5f);
-    glVertex3f(-0.5f, -0.5f, -0.5f);
-    glVertex3f(0.5f, -0.5f, -0.5f);
+    
 
-    // Front face  (z = 1.0f)
-    glColor3f(1.0f, 0.0f, 0.0f);     // Red
-    glVertex3f(0.5f, 0.5f, 0.5f);
-    glVertex3f(-0.5f, 0.5f, 0.5f);
-    glVertex3f(-0.5f, -0.5f, 0.5f);
-    glVertex3f(0.5f, -0.5f, 0.5f);
-
-    // Back face (z = -1.0f)
-    glColor3f(1.0f, 1.0f, 0.0f);     // Yellow
-    glVertex3f(0.5f, -0.5f, -0.5f);
-    glVertex3f(-0.5f, -0.5f, -0.5f);
-    glVertex3f(-0.5f, 0.5f, -0.5f);
-    glVertex3f(0.5f, 0.5f, -0.5f);
-
-    // Left face (x = -1.0f)
-    glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-    glVertex3f(-0.5f, 0.5f, 0.5f);
-    glVertex3f(-0.5f, 0.5f, -0.5f);
-    glVertex3f(-0.5f, -0.5f, -0.5f);
-    glVertex3f(-0.5f, -0.5f, 0.5f);
-
-    // Right face (x = 1.0f)
-    glColor3f(1.0f, 0.0f, 1.0f);     // Magenta
-    glVertex3f(0.5f, 0.5f, -0.5f);
-    glVertex3f(0.5f, 0.5f, 0.5f);
-    glVertex3f(0.5f, -0.5f, 0.5f);
-    glVertex3f(0.5f, -0.5f, -0.5f);
-    glEnd();  // End of drawing color-cube
-
-
+    for (int x = -1; x <= 1; ++x)
+    {
+        for (int y = -1; y <= 1; ++y)
+        {
+            for (int z = -1; z <= 1; ++z) {
+                drawCube(x * separation, y * separation, z * separation, 1.0f);
+            }
+        }
+    }
 
     glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
 }
